@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'frontend'
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,7 @@ DATABASES = {
     }
 }
 
+STATICFILES_DIRS = [BASE_DIR / 'frontend/static',]
 
 
 # Password validation

@@ -14,11 +14,23 @@ class Article:
         self.urlToImage = urlToImage
         self.publishedAt = publishedAt
         self.content = content
+    def to_dict(self):
+        return {
+            'source': self.source,
+            'author': self.author,
+            'title': self.title,
+            'description': self.description,
+            'url': self.url,
+            'urlToImage': self.urlToImage,
+            'publishedAt': self.publishedAt,
+            'content': self.content
+            }
 
 
 class NewsAPI(API):
     def __init__(self) -> None:
         super().__init__()
+        self.articles = []
         
     def fetch_data(self, symbol):
         url = 'https://newsapi.org/v2/everything'
@@ -55,9 +67,12 @@ class NewsAPI(API):
                 content=article['content']
             )
             parsed_data.append(parsed_article)
-
+        self.articles = parsed_article
         return parsed_data
-
+    def to_dict(self):
+        start = {}
+        for article in self.articles:
+            start.update(article.to_dict())
         
 if __name__ == "__main__":
     news = NewsAPI()
