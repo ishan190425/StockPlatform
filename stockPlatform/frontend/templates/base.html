@@ -27,7 +27,7 @@
             <canvas id="stockChart"></canvas>
         </div>
         {% endblock %}
-        
+
         <div class="newsContainer">
             {% block content %}
             {% for article in articles %}
@@ -43,6 +43,14 @@
 
         
     </div>
+
+    <div class="redditContainer">
+        <h2>Reddit Posts <input type="text" id="subredditInput" placeholder="Enter subreddit (default: stocks)" />
+        <button onclick="fetchRedditPosts()">Fetch Posts</button></h2>
+        
+        <div id="reddit-posts" class="redditPosts"></div>
+    </div>
+
     <script src="{% static 'frontend.js' %}"></script>
 </body>
 

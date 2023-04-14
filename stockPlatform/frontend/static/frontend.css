@@ -37,6 +37,22 @@ body {
     overflow-y: scroll;
     overflow-wrap: break-word;
 }
+.redditContainer{
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 50%;
+    height: 450px;
+    position: relative;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
+
+.reddit-post{
+    height: 50%;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+}
 
 .article{
     height: 50%;
