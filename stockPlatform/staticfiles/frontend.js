@@ -70,3 +70,47 @@ fetchStockData('AAPL').then(data => {
     
     // Process and display the data on your website
 });
+
+async function fetchRedditPosts() {
+    const subredditInput = document.getElementById('subredditInput');
+    const subreddit = subredditInput.value || 'wallstreetbets';
+    const stock = "TSLA"
+    const response = await fetch(`/?subreddit=${subreddit}&stock=${stock}`);
+    const data = await response.json();
+    displayRedditPosts(data);
+    
+}
+
+fetchRedditPosts();
+
+function displayRedditPosts(data) {
+    const redditPostsContainer = document.getElementById('reddit-posts');
+
+    data.forEach(post => {
+        const postContainer = document.createElement('div');
+        postContainer.classList.add('reddit-post');
+
+        const postTitle = document.createElement('h3');
+        postTitle.innerText = post.title;
+        postContainer.appendChild(postTitle);
+
+        if (post.thumbnail) {
+            const postImage = document.createElement('img');
+            postImage.src = post.thumbnail;
+            postImage.alt = post.title;
+            postContainer.appendChild(postImage);
+        }
+
+        const postContent = document.createElement('p');
+        postContent.innerText = post.selftext;
+        postContainer.appendChild(postContent);
+
+        const readMoreLink = document.createElement('a');
+        readMoreLink.href = post.url;
+        readMoreLink.target = '_blank';
+        readMoreLink.innerText = 'Read more';
+        postContainer.appendChild(readMoreLink);
+
+        redditPostsContainer.appendChild(postContainer);
+    });
+}
