@@ -9,15 +9,31 @@ body {
     justify-content: center;
 }
 
+.top{
+    margin: auto;
+    height: 500px;
+    display: flex;
+    /*added*/
+    flex-direction: row;
+    /*added*/
+    
+}
+
 .newsContainer{
     border: 1px solid black;
     border-radius: 4px;
-    height: 500px;
     width: 50%;
     position: relative;
-    top:0%;
-    left: 50%;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
     /* background-color: orangered; */
+}
+
+.stockChartContainer{
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 50%;
+    position: relative;
     overflow-y: scroll;
     overflow-wrap: break-word;
 }
