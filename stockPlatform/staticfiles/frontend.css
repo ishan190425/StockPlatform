@@ -9,17 +9,32 @@ body {
     justify-content: center;
 }
 
+.top{
+    margin: auto;
+    height: 500px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
+
 .newsContainer{
     border: 1px solid black;
     border-radius: 4px;
-    height: 500px;
-    width: 50%;
+    width: 49%;
     position: relative;
-    top:0%;
     left: 50%;
+    /* background-color: orangered; */
+}
+
+.stockChartContainer{
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 49%;
+    position: relative;
+    left: 0%;
     /* background-color: orangered; */
     overflow-y: scroll;
     overflow-wrap: break-word;
+    float: left;
 }
 
 .article{

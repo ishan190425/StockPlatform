@@ -7,7 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'frontend.css' %}">
-    <title>News Site</title>
+    <title>Stock Platform Site</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 </head>
 <body>
     <div class="companyTicker">
@@ -17,17 +20,28 @@
         </form>
     </div>
 
-    <div class="newsContainer">
-        {% block content %}
-        {% for article in articles %}
-        <div class="article">
-            <h2>{{ article.title }}</h2>
-            <img src="{{ article.urlToImage }}" alt="TSLA">
-            <p>{{ article.description }} <a href="{{ article.url }}">Read more</a></p>
-            
+    <div class="top">
+
+        {% block stockChart %}
+        <div class="stockChartContainer">
+            <canvas id="stockChart"></canvas>
         </div>
-        {% endfor %}
         {% endblock %}
+        
+        <div class="newsContainer">
+            {% block content %}
+            {% for article in articles %}
+            <div class="article">
+                <h2>{{ article.title }}</h2>
+                <img src="{{ article.urlToImage }}" alt="TSLA">
+                <p>{{ article.description }} <a href="{{ article.url }}">Read more</a></p>
+                
+            </div>
+            {% endfor %}
+            {% endblock %}
+        </div>
+
+        
     </div>
     <script src="{% static 'frontend.js' %}"></script>
 </body>

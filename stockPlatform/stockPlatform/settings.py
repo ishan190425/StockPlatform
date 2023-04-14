@@ -88,7 +88,7 @@ WSGI_APPLICATION = "stockPlatform.wsgi.application"
 # }
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [BASE_DIR / 'frontend/static',]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/static')]
 
 
 # Password validation
