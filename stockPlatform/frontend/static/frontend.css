@@ -1,0 +1,37 @@
+body {
+    background-color: lightblue;
+}
+
+.companyTicker{
+    margin: auto;
+    background-color: green; /* Comment out this line after debug */
+    display: flex;
+    justify-content: center;
+}
+
+.newsContainer{
+    border: 1px solid black;
+    border-radius: 4px;
+    height: 500px;
+    width: 50%;
+    position: relative;
+    top:0%;
+    left: 50%;
+    /* background-color: orangered; */
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
+
+.article{
+    height: 50%;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+img {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 5px;
+    width: 150px;
+}
