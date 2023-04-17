@@ -22,14 +22,13 @@
 
     <div class="top">
 
-        {% block stockChart %}
+        
         <div class="stockChartContainer">
             <canvas id="stockChart"></canvas>
         </div>
-        {% endblock %}
+        
 
         <div class="newsContainer">
-            {% block content %}
             {% for article in articles %}
             <div class="article">
                 <h2>{{ article.title }}</h2>
@@ -38,10 +37,38 @@
                 
             </div>
             {% endfor %}
-            {% endblock %}
         </div>
 
         
+    </div>
+
+    <div class="incomeContainer">
+        <div id="incomeStatement"></div>
+        
+    </div>
+
+    <div class="balanceSheetContainer">
+        <div id="balanceSheet"></div>
+    </div>
+
+    <div class="companyOverviewContainer">
+        <div id="companyOverview"></div>
+    </div>
+
+    <div class="cashFlowContainer">
+        <div id="cashFlow"></div>
+    </div>
+
+    <div class="earningsContainer">
+        <div id="earnings"></div>
+    </div>
+
+    <div class="earningsCalanderContainer">
+        <div id="earningsCalander"></div>
+    </div>
+
+    <div class="optionsContainer">
+        <div id="options"></div>
     </div>
 
     <div class="redditContainer">
