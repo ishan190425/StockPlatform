@@ -33,7 +33,6 @@ class NewsAPI(API):
         self.articles = []
         
     def fetch_data(self, symbol):
-        print("Asked for data")
         url = 'https://newsapi.org/v2/everything'
         params = {
             'q': symbol,
@@ -69,7 +68,6 @@ class NewsAPI(API):
             )
             parsed_data.append(parsed_article)
         self.articles = parsed_article
-        print("Parsed Data")
         return parsed_data
     def to_dict(self):
         start = {}
