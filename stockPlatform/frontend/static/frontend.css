@@ -1,26 +1,92 @@
 body {
-    background-color: lightblue;
+    font-family: 'Montserrat';
 }
 
 .companyTicker{
     margin: auto;
-    background-color: green; /* Comment out this line after debug */
     display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2px;
+    text-align: center;
+    font-family: 'Montserrat';
+}
+.window{
+    display: flex;
+    overflow-y: hidden;
+}
+.leftWindow{
+    width: 20%;
+    float: left;
+}
+.platformName{
+    display: flex;
+    text-align: center;
     justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+.Ticker{
+    text-align: center;
+    font-family: 'Montserrat';
+}
+.Search{
+    background-color: transparent;
+    border: 1px black;
+    font-family: 'Montserrat';
+}
+.watchListSearch{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    align-items: stretch;
+}
+.watchlist{
+    display: block;
+    text-align: center;
+    justify-content: space-around;
+    align-items: center;
+}
+.watchListItem{
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Montserrat';
 }
 
-.top{
-    margin: auto;
-    height: 500px;
+.rightWindow{
+    float: right;
+    width: 100%;
+    height: 50%;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+
+.tickerInfo{
     display: flex;
-    /*added*/
-    flex-direction: row;
-    /*added*/
-    
+}
+
+.infoTabs{
+    display: flex;
+    padding-bottom: 2px;
+}
+.infoButton{
+    background-color: transparent;
+    border: none;
+    font-family: 'Montserrat';
+}
+.infoButton:hover {
+    background-color: #ddd;
+}
+
+.infoButton.active{
+    border-bottom: 2px solid green;
+}
+
+.currentPrice{
+    margin-left: 20px;
 }
 
 .newsContainer{
-    border: 1px solid black;
     border-radius: 4px;
     width: 50%;
     position: relative;
@@ -29,16 +95,13 @@ body {
     /* background-color: orangered; */
 }
 
-.stockChartContainer{
-    border: 1px solid black;
+.Prices container{
     border-radius: 4px;
-    width: 50%;
     position: relative;
     overflow-y: scroll;
     overflow-wrap: break-word;
 }
 .redditContainer{
-    border: 1px solid black;
     border-radius: 4px;
     width: 50%;
     height: 450px;
@@ -66,4 +129,9 @@ img {
     border-radius: 4px;
     padding: 5px;
     width: 150px;
+}
+
+.hide{
+    display: none;
+    border: none;
 }

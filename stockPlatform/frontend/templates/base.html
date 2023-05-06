@@ -10,72 +10,96 @@
     <title>Stock Platform Site</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="companyTicker">
-        <form class="companyTickerForm">
-                <input id="search" type="text" class="Ticker" placeholder="Stock Ticker..." />
-                <button id="clear" class="Search">Search</button>
-        </form>
+<body onload="boot()">
+    <div class="platformName">
+        <h1>Stock Platform</h1>
     </div>
-
-    <div class="top">
-
-        
-        <div class="stockChartContainer">
-            <canvas id="stockChart"></canvas>
-        </div>
-        
-
-        <div class="newsContainer">
-            {% for article in articles %}
-            <div class="article">
-                <h2>{{ article.title }}</h2>
-                <img src="{{ article.urlToImage }}" alt="TSLA">
-                <p>{{ article.description }} <a href="{{ article.url }}">Read more</a></p>
+    <div class="window">
+        <div class="leftWindow">
+            <div class="companyTicker">
+                <form class="companyTickerForm">
+                    <input id="searchTicker" type="text" class="Ticker" placeholder="Stock Ticker..." />
+                    <button id="1px" type="button" class="Search" onclick="updateSymbol()">Search</button>
+                </form>
+            </div>
+            <div class="watchlist">
+                <div class="platformName">
+                    <h1>Watchlist</h1>
+                </div>
+                <button class="watchListSearch">
+                    <div class="watchListItem">
+                        <div class="watchListItemSymbol">TSLA</div>
+                        <div class="watchListItemPrice">$32.48</div>
+                    </div>
+                    
+                </button>
                 
             </div>
-            {% endfor %}
         </div>
+        <div class="rightWindow">
+            <div class="stockChartContainer">
+                <div id="stockChart"><!-- TradingView Widget BEGIN -->
+            
+                </div>
+            
+            <div class="infoTabs">
+                <button class="infoButton" id="pricesButton" onclick="companyPrices()">Options</button>
+                <button class="infoButton" id="companyNewsButton" onclick="companyNews()">News</button>
+                <button class="infoButton" id="companyOverviewButton" onclick="companyOverview()">Overview</button>
+                <button class="infoButton" id="companyIncomeButton" onclick="companyIncome()">Income</button>
+                <button class="infoButton" id="companyBalanceSheetButton" onclick="companyBalanceSheet()">Balance Sheet</button>
+                <button class="infoButton" id="companyCashFlowButton" onclick="companyCashFlow()">Cash Flow</button>
+                <button class="infoButton" id="companyEarningsButton" onclick="companyEarnings()">Earnings</button>
+                <button class="infoButton" id="companyEarningsCalanderButton" onclick="companyEarningsCalander()">Earnings Calander</button>
+                <button class="infoButton" id="redditButton" onclick="companyReddit()">Reddit</button>
+            </div>
+            <div class="Prices container">
+                <div class="optionsContainer">
+                    <div id="options"></div>
+                </div>
+            </div>
+            <div class="newsContainer container">
+                <div id="news"></div>
+            </div>
 
-        
-    </div>
+            <div class="companyOverviewContainer container">
+                <div id="companyOverview"></div>
+            </div>
 
-    <div class="incomeContainer">
-        <div id="incomeStatement"></div>
-        
-    </div>
+            <div class="incomeContainer container">
+                <div id="incomeStatement"></div>
+                
+            </div>
 
-    <div class="balanceSheetContainer">
-        <div id="balanceSheet"></div>
-    </div>
+            <div class="balanceSheetContainer container">
+                <div id="balanceSheet"></div>
+            </div>
 
-    <div class="companyOverviewContainer">
-        <div id="companyOverview"></div>
-    </div>
+            
+            <div class="cashFlowContainer container">
+                <div id="cashFlow"></div>
+            </div>
 
-    <div class="cashFlowContainer">
-        <div id="cashFlow"></div>
-    </div>
+            <div class="earningsContainer container">
+                <div id="earnings"></div>
+            </div>
 
-    <div class="earningsContainer">
-        <div id="earnings"></div>
-    </div>
+            <div class="earningsCalanderContainer container">
+                <div id="earningsCalander"></div>
+            </div>
 
-    <div class="earningsCalanderContainer">
-        <div id="earningsCalander"></div>
-    </div>
+            
 
-    <div class="optionsContainer">
-        <div id="options"></div>
-    </div>
-
-    <div class="redditContainer">
-        <h2>Reddit Posts <input type="text" id="subredditInput" placeholder="Enter subreddit (default: stocks)" />
-        <button onclick="fetchRedditPosts()">Fetch Posts</button></h2>
-        
-        <div id="reddit-posts" class="redditPosts"></div>
+            <div class="redditContainer container hide">
+                <input type="text" id="subredditInput" placeholder="Enter subreddit (default: stocks)" />
+                <button onclick="fetchRedditPosts()">Fetch Posts</button>
+                <div id="reddit-posts" class="redditPosts"></div>
+            </div>
+        </div>
     </div>
 
     <script src="{% static 'frontend.js' %}"></script>
