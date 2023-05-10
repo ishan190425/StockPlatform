@@ -43,8 +43,10 @@ class NewsAPI(API):
         response = requests.get(url, params=params)
 
         if response.status_code == 200:
-            data = response.json()
-            return data['articles']
+            data = response.json()['articles']
+            data = self.parse_data(data)
+            data = [article.to_dict() for article in data]
+            return data
         else:
             print(f"Error {response.status_code}: {response.text}")
             return []

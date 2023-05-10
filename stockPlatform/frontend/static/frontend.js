@@ -1,86 +1,326 @@
-async function fetchStockData(symbol) {
-    const response = await fetch(`/?symbol=${symbol}`);
+async function fetchNews(symbol) {
+    const response = await fetch(`/?news=${symbol}`);
     const data = await response.json();
-    return data;
+    showNews(data,symbol)
+}
+async function showNews(data) {
+    const articles = data;
+    const news = document.getElementById('news');
+
+    articles.forEach(article => {
+        const articleElement = document.createElement('div');
+        articleElement.classList.add('article');
+
+        const title = document.createElement('h3');
+        title.textContent = article.title;
+        articleElement.appendChild(title);
+
+        const image = document.createElement('img');
+        image.src = article.urlToImage
+        articleElement.appendChild(image)
+
+        const description = document.createElement('p');
+        description.textContent = article.description;
+        articleElement.appendChild(description);
+
+        const link = document.createElement('a');
+        link.href = article.url;
+        link.textContent = 'Read more';
+        description.appendChild(link);
+
+        news.appendChild(articleElement);
+    })
 }
 
-function extractTimeSeriesData(jsonData) {
-    const timeSeriesData = jsonData['Time Series (15min)'];
-    const dataPoints = [];
+async function stockSummary() {
+    const container = document.createElement('div');
+    container.classList.add('tradingview-widget-container');
 
-    for (const timestamp in timeSeriesData) {
-        const dataPoint = {
-            time: timestamp,
-            open: parseFloat(timeSeriesData[timestamp]['1. open']),
-            high: parseFloat(timeSeriesData[timestamp]['2. high']),
-            low: parseFloat(timeSeriesData[timestamp]['3. low']),
-            close: parseFloat(timeSeriesData[timestamp]['4. close']),
-            volume: parseInt(timeSeriesData[timestamp]['5. volume']),
-        };
-        dataPoints.push(dataPoint);
-    }
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
 
-    return dataPoints;
-}
+    const copyright = document.createElement('div');
+    copyright.classList.add('tradingview-widget-copyright');
 
-function renderStockChart(dataPoints,symbol) {
-    const ctx = document.getElementById('stockChart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dataPoints.map(dp => dp.time),
-            datasets: [
-                {
-                    label: 'Stock Price',
-                    data: dataPoints.map(dp => dp.close),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 1,
-                    fill: true,
-                },
-            ],
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'minute',
-                    },
-                    adapters: {
-                        date: {
-                            
-                        },
-                    }, 
-                },
-                y: {
-                    beginAtZero: true,
-                },
-            },
-        },
+    const link = document.createElement('a');
+    link.href = 'https://www.tradingview.com/symbols/NASDAQ-TSLA/';
+    link.rel = 'noopener';
+    link.target = '_blank';
+
+    const span = document.createElement('span');
+    span.classList.add('blue-text');
+    span.textContent = 'TSLA price today';
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "symbol": "NASDAQ:TSLA",
+        "width": "100%",
+        "locale": "en",
+        "colorTheme": "light",
+        "isTransparent": true
     });
+
+    container.appendChild(widget);
+    container.appendChild(script);
+    container.appendChild(copyright);
+    document.getElementById("stockSummary").appendChild(container);
+
+}
+async function stockChart(symbol) {
+    const stockChart = document.getElementById("stockCanvas");
+    if (stockChart) {
+        return;
+    }
+    const container = document.createElement('div');
+    container.id = "stockCanvas";
+    container.classList.add('tradingview-widget-container');
+
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    copyright.classList.add('tradingview-widget-copyright');
+
+    const link = document.createElement('a');
+    link.href = `https://www.tradingview.com/symbols/${symbol}/`;
+    link.rel = 'noopener';
+    link.target = '_blank';
+
+    const span = document.createElement('span');
+    span.classList.add('blue-text');
+
+    link.appendChild(span);
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "symbols": [
+            [
+                `${symbol}|1D`
+            ]
+        ],
+        "chartOnly": true,
+        "width": '100%',
+        "height": 500,
+        "locale": "en",
+        "colorTheme": "light",
+        "autosize": false,
+        "showVolume": true,
+        "showMA": true,
+        "hideDateRanges": false,
+        "hideMarketStatus": false,
+        "hideSymbolLogo": true,
+        "scalePosition": "right",
+        "scaleMode": "Normal",
+        "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+        "fontSize": "10",
+        "noTimeScale": false,
+        "valuesTracking": "1",
+        "changeMode": "price-and-percent",
+        "chartType": "area",
+        "maLineColor": "#2962FF",
+        "maLineWidth": 1,
+        "maLength": 9,
+        "lineWidth": 2,
+        "lineType": 0
+    });
+    container.appendChild(widget);
+    container.appendChild(script);
+    container.appendChild(copyright);
+
+    document.getElementById('stockChart').appendChild(container);
 }
 
+async function stockTape() {
+    const container = document.createElement('div');
+    container.classList.add('tradingview-widget-container');
 
-// Call the fetchStockData function with a symbol
-fetchStockData('AAPL').then(data => {
-    const dataPoints = extractTimeSeriesData(data);
-    renderStockChart(dataPoints);
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    copyright.classList.add('tradingview-widget-copyright');
+
+    const link = document.createElement('a');
+    link.href = 'https://www.tradingview.com/markets/';
+    link.rel = 'noopener';
+    link.target = '_blank';
+
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "symbols": [
+            {
+                "description": "",
+                "proName": "NASDAQ:SQQQ"
+            },
+            {
+                "description": "",
+                "proName": "NASDAQ:TQQQ"
+            },
+            {
+                "description": "",
+                "proName": "NYSE:DOW"
+            },
+            {
+                "description": "",
+                "proName": "NASDAQ:NDX"
+                
+            }
+        ],
+        "showSymbolLogo": true,
+        "colorTheme": "light",
+        "isTransparent": false,
+        "displayMode": "adaptive",
+        "locale": "en"
+    });
+
+    container.appendChild(widget);
+    container.appendChild(script);
+    container.appendChild(copyright);
+    document.getElementById("stockTape").appendChild(container);
+}
+
+async function fetchCompanyOverviewCopy() {
+    const container = document.createElement('div');
+    container.id = "companyOverviewDiv"
+    container.classList.add('tradingview-widget-container');
+
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    copyright.classList.add('tradingview-widget-copyright');
+
+    const link = document.createElement('a');
+    link.href = 'https://www.tradingview.com/symbols/NASDAQ-AAPL/financials-overview/';
+    link.rel = 'noopener';
+    link.target = '_blank';
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-financials.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "colorTheme": "light",
+        "isTransparent": true,
+        "largeChartUrl": "",
+        "displayMode": "adaptive",
+        "width": '100%',
+        "height": 325,
+        "symbol": "NASDAQ:TSLA",
+        "locale": "en"
+    });
+
+    container.appendChild(widget);
+    container.appendChild(script);
+    container.appendChild(copyright);
+
+    document.getElementById("companyOverview").appendChild(container);
+
+}
+
+async function fetchcompanyProfile(){
+    const container = document.createElement('div');
+    container.id = "companyProfileDiv"
+    container.classList.add('tradingview-widget-container');
+
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    const link = document.createElement('a');
+    link.href = 'https://www.tradingview.com/symbols/NASDAQ-TSLA/';
+    link.rel = 'noopener';
+    link.target = '_blank';
+    const span = document.createElement('span');
+    span.classList.add('blue-text');
+    span.textContent = 'TSLA key facts';
+    // link.appendChild(span);
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "width": '100%',
+        "height": 325,
+        "colorTheme": "light",
+        "isTransparent": true,
+        "symbol": "NASDAQ:TSLA",
+        "locale": "en"
+    });
+
+    container.appendChild(widget);
+    container.appendChild(copyright);
+    container.appendChild(script);
     
-    // Process and display the data on your website
-});
+    document.getElementById('companyProfile').appendChild(container);
+}
 
-async function fetchRedditPosts() {
+async function fetchCompanyNews() {
+    const container = document.createElement('div');
+    container.id = "companyNewsDiv"
+    container.classList.add('tradingview-widget-container');
+
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    const copyrightLink = document.createElement('a');
+    const copyrightSpan = document.createElement('span');
+
+    copyrightLink.href = 'https://www.tradingview.com/symbols/TSLA/history-timeline/';
+    copyrightLink.rel = 'noopener';
+    copyrightLink.target = '_blank';
+    copyrightSpan.classList.add('blue-text');
+    copyrightSpan.textContent = 'TSLA history';
+    copyrightLink.appendChild(copyrightSpan);
+    copyright.appendChild(copyrightLink);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "feedMode": "symbol",
+        "symbol": "TSLA",
+        "colorTheme": "light",
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "width": '100%',
+        "height": 325,
+        "locale": "en"
+    });
+
+    container.appendChild(widget);
+    container.appendChild(copyright);
+    container.appendChild(script);
+    document.getElementById("news").appendChild(container);
+}
+
+async function fetchRedditPosts(symbol) {
     const subredditInput = document.getElementById('subredditInput');
     const subreddit = subredditInput.value || 'wallstreetbets';
-    const stock = "TSLA"
-    const response = await fetch(`/?subreddit=${subreddit}&stock=${stock}`);
+    const response = await fetch(`/?subreddit=${subreddit}&stock=${symbol}`);
     const data = await response.json();
+    console.log(symbol);
     displayRedditPosts(data);
     
 }
-
-fetchRedditPosts();
 
 function displayRedditPosts(data) {
     const redditPostsContainer = document.getElementById('reddit-posts');
@@ -118,11 +358,9 @@ function displayRedditPosts(data) {
     });
 }
 
-
-async function fetchIncomeStatement() {
+async function fetchIncomeStatement(symbol) {
     const subredditInput = document.getElementById('incomeEarnings');
-    const stock = "TSLA"
-    const response = await fetch(`/?incomeStatement=${stock}`);
+    const response = await fetch(`/?incomeStatement=${symbol}`);
     const data = await response.json();
     displayIncomeStatement(data)
 }
@@ -165,12 +403,8 @@ function displayIncomeStatement(data) {
     document.getElementById('incomeStatement').innerHTML = html;
 }
 
-
-
-fetchIncomeStatement();
-
-async function fetchCompanyOverview() {
-    const response = await fetch(`/?companyOverview=TSLA`);
+async function fetchCompanyOverview(symbol) {
+    const response = await fetch(`/?companyOverview=${symbol}`);
     const data = await response.json();
     displayCompanyOverview(data)
 }
@@ -226,13 +460,10 @@ function displayCompanyOverview(data) {
     <p><b>Ex-Dividend Date:</b> ${data.ExDividendDate}</p>`;
 }
 
-fetchCompanyOverview();
-
-async function fetchBalanceSheet() {
-    const response = await fetch(`/?balanceSheet=TSLA`);
+async function fetchBalanceSheet(symbol) {
+    const response = await fetch(`/?balanceSheet=${symbol}`);
     const data = await response.json();
     displayBalanceSheet(data)
-    
 }
 
 function displayBalanceSheet(data) {
@@ -284,10 +515,8 @@ function displayBalanceSheet(data) {
     document.getElementById('balanceSheet').innerHTML = html;
 }
 
-fetchBalanceSheet();
-
-async function fetchCashFlow() {
-    const response = await fetch(`/?cashFlow=TSLA`);
+async function fetchCashFlow(symbol) {
+    const response = await fetch(`/?cashFlow=${symbol}`);
     const data = await response.json();
     displayCashFlow(data);
 }
@@ -334,10 +563,9 @@ function displayCashFlow(cashFlowData) {
     document.getElementById("cashFlow").innerHTML = table;
 }
 
-fetchCashFlow();
 
-async function fetchEarnings() {
-    const response = await fetch(`/?earnings=TSLA`);
+async function fetchEarnings(symbol) {
+    const response = await fetch(`/?earnings=${symbol}`);
     const data = await response.json();
     displayEarnings(data);
 }
@@ -391,10 +619,8 @@ function displayEarnings(data) {
     earningsDiv.appendChild(table);
 }
 
-fetchEarnings()
-
-async function fetchEarningsCalander() {
-    const response = await fetch("/?earningsCalander=TSLA");
+async function fetchEarningsCalander(symbol) {
+    const response = await fetch(`/?earningsCalander=${symbol}`);
     const data = await response.json();
     displayEarningsCalander(data)
 }
@@ -411,11 +637,8 @@ function displayEarningsCalander(data) {
     
 }
 
-fetchEarningsCalander();
-
-
-async function fetchOptions() {
-    const response = await fetch(`/?options=TSLA`);
+async function fetchOptions(symbol) {
+    const response = await fetch(`/?options=${symbol}`);
     const data = await response.json();
     displayOptions(data);
 }
@@ -459,4 +682,155 @@ function displayOptions(data) {
     }
 }
 
-fetchOptions()
+function transitionTab(button, element) {
+    hideAll();
+    document.getElementById(button).classList.add('active');
+    var elm = document.getElementsByClassName(element)
+    Array.prototype.forEach.call(elm, function (container) {
+        container.classList.remove('hide');
+    });
+    return fetchSymbol();
+}
+
+function updateSymbol() {
+    clearStocks();
+    boot();
+    companyPrices();
+}
+
+function boot() {
+    var symbol = fetchSymbol();
+    stockSummary();
+    stockChart(symbol);
+    fetchOptions(symbol);
+    stockTape();
+}
+
+function fetchSymbol() {
+    const search = document.getElementById('searchTicker');
+    const symbol = search.value || 'TSLA';
+    return symbol;
+}
+
+function hideAll() {
+    var infoButton = document.getElementsByClassName('infoButton');
+    Array.prototype.forEach.call(infoButton, function (tab) {
+        tab.classList.remove('active');
+    });
+    var containers = document.getElementsByClassName("container");
+    Array.prototype.forEach.call(containers, function (container) {
+        container.classList.add('hide');
+    });
+}   
+
+function companyPrices() {
+    var symbol = transitionTab("pricesButton", "Prices");
+    fetchOptions(symbol);
+}
+
+function companyNews() {
+    var symbol = transitionTab("companyNewsButton", "newsContainer");
+    if (document.getElementById("companyNewsDiv") == null) {
+        fetchCompanyNews();
+    }
+}
+
+function companyOverview() {
+    var symbol = transitionTab("companyOverviewButton", "companyOverviewContainer");
+    if (document.getElementById("companyOverviewDiv") == null) {
+        fetchCompanyOverviewCopy();
+    }
+}
+
+function companyProfile() {
+    var symbol = transitionTab("companyProfileButton", "companyProfileContainer");
+    if (document.getElementById("companyProfileDiv") == null) {
+        fetchcompanyProfile();
+    }
+}
+    
+
+function companyIncome() {
+    var symbol = transitionTab("companyIncomeButton", "incomeContainer");
+    fetchIncomeStatement(symbol);
+}
+
+function companyBalanceSheet() {
+    var symbol = transitionTab("companyBalanceSheetButton", "balanceSheetContainer");
+    fetchBalanceSheet(symbol);
+}
+
+function companyCashFlow() {
+    var symbol = transitionTab("companyCashFlowButton", "cashFlowContainer");
+    fetchCashFlow(symbol);
+}
+
+function companyEarnings() { 
+    var symbol = transitionTab("companyEarningsButton", "earningsContainer");
+    fetchEarnings(symbol);
+}
+
+function companyEarningsCalander() {
+    var symbol = transitionTab("companyEarningsCalanderButton", "earningsCalanderContainer");
+    fetchEarningsCalander(symbol);
+}
+
+function companyReddit() {
+    var symbol = transitionTab("redditButton", "redditContainer");
+    fetchRedditPosts(symbol);
+}
+
+
+function clearStocks(){
+    document.getElementById("stockChart").innerHTML = null;
+    document.getElementById("options").innerHTML = null
+    document.getElementById("news").innerHTML = null;
+    document.getElementById("companyOverview") = null;
+    document.getElementById("incomeStatement").innerHTML = null;
+    document.getElementById("balanceSheet").innerHTML = null;
+    document.getElementById("cashFlow").innerHTML = null;
+    document.getElementById("earnings").innerHTML = null;
+    document.getElementById("earningsCalander").innerHTML = null;
+    document.getElementById("reddit-posts").innerHTML = null;
+}
+
+function watchlistButton() {
+    const container = document.createElement('div');
+    // container.id = symbol; TODO: Implement tracking ids
+    container.classList.add("watchListItem");
+    container.classList.add('tradingview-widget-container');
+
+    const widget = document.createElement('div');
+    widget.classList.add('tradingview-widget-container__widget');
+
+    const copyright = document.createElement('div');
+    copyright.classList.add('tradingview-widget-copyright');
+
+    const link = document.createElement('a');
+    link.href = 'https://www.tradingview.com/symbols/NASDAQ-TSLA/';
+    link.rel = 'noopener';
+    link.target = '_blank';
+
+    copyright.appendChild(link);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js';
+    script.async = true;
+    script.textContent = JSON.stringify({
+        "symbol": "NASDAQ:TSLA",
+        "width": "100%",
+        "colorTheme": "light",
+        "isTransparent": true,
+        "locale": "en"
+    });
+
+    container.appendChild(widget);
+    container.appendChild(script);
+    container.appendChild(copyright);
+
+    document.getElementById("watchListSearch").appendChild(container);
+
+}
+
+watchlistButton();
