@@ -3,10 +3,10 @@ import os
 # Create your views here.
 from django.shortcuts import render
 from django.http import JsonResponse
-from Backend.NewsAPI import NewsAPI
-from Backend.StockAPI import StockAPI
-from Backend.RedditAPI import RedditAPI
-from Backend.OptionsAPI import OptionsAPI
+from stockPlatform.Backend.NewsAPI import NewsAPI
+from stockPlatform.Backend.StockAPI import StockAPI
+from stockPlatform.Backend.RedditAPI import RedditAPI
+from stockPlatform.Backend.OptionsAPI import OptionsAPI
 # Replace with your actual API call
 
 news_api = NewsAPI()

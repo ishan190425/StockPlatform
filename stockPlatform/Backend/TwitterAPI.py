@@ -1,4 +1,4 @@
-from API import API
+from stockPlatform.API import API
 class TwitterAPI(API):
     def __init__(self) -> None:
         super().__init__()

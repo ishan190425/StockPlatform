@@ -1,5 +1,5 @@
 import requests
-from Backend.API import API
+from stockPlatform.Backend.API import API
 import os
 import json
 

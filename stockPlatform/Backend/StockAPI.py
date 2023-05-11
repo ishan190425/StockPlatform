@@ -1,4 +1,4 @@
-from Backend.API import API
+from stockPlatform.Backend.API import API
 import requests
 import os
 import csv

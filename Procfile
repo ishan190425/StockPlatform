@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath stockPlatform stockPlatform/wsgi.py
+web: gunicorn --pythonpath stockPlatform stockPlatform.wsgi.py
